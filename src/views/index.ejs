@@ -1,4 +1,8 @@
-<h1>Hi <%= locals.username %>!</h1>
-<form action="/auth/logout?_method=DELETE" method="POST">
-  <button type="submit">Logout</button>
-</form>
+<div class="row">
+  <div class="col-md-6 card mx-auto p-3">
+    <h1>Hi <%= username %>!</h1>
+    <form action="/auth/logout?_method=DELETE" method="POST">
+      <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+  </div>
+</div>

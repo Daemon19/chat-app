@@ -5,6 +5,7 @@ const flash = require('express-flash');
 const session = require('express-session');
 const path = require('path');
 const methodOverride = require('method-override');
+const expressLayouts = require('express-ejs-layouts');
 
 const intializePassport = require('./auth/passport-config');
 
@@ -21,6 +22,9 @@ mongoose.connect(process.env.MONGODB_URI, () =>
 
 const app = express();
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(flash());
 app.use(
@@ -33,12 +37,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(methodOverride('_method'));
+app.use(expressLayouts);
 
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
-
-app.set('view-engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening at http://localhost:${PORT}`));

@@ -1,14 +1,29 @@
-<h1>Login</h1>
-<% if (messages.error) { %> <%= messages.error %> <% } %>
-<form action="/auth/login" method="post">
-  <div>
-    <label for="username">Username</label>
-    <input type="text" name="username" id="username" required />
+<div class="row">
+  <div class="col-md-6 mx-auto card p-3">
+    <h1 class="display-3 text-center fw-semibold">
+      <i class="fa-solid fa-right-to-bracket"></i> Login
+    </h1>
+
+    <% if (messages.error) { %> <%= messages.error %> <% } %>
+
+    <form action="/auth/login" method="post" class="pt-3">
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" name="username" id="username" />
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          id="password"
+        />
+      </div>
+      <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="pt-3">
+      Don't have account? <a href="/auth/register">Register</a>
+    </p>
   </div>
-  <div>
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" required />
-  </div>
-  <button type="submit">Login</button>
-</form>
-<a href="/auth/register">Register</a>
+</div>
