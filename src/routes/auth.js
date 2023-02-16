@@ -21,10 +21,12 @@ router.post(
     .custom(usernameNotInUse),
   body('password').notEmpty().isLength({ min: 8 }),
   async (req, res) => {
+    const renderErrors = (errors) => res.render('register.ejs', { errors });
+
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       const messages = errors.array().map(({ msg }) => msg);
-      return res.render('register.ejs', { errors: messages });
+      return renderErrors(messages);
     }
 
     const { username, password } = req.body;
@@ -35,7 +37,7 @@ router.post(
       res.redirect('/auth/login');
     } catch (e) {
       console.error(e);
-      res.redirect('/auth/register');
+      renderErrors(['Server error']);
     }
   }
 );
@@ -66,14 +68,18 @@ router.delete('/logout', (req, res) => {
 module.exports = router;
 
 async function usernameNotInUse(username) {
-  try {
-    const user = await User.findOne({ username });
-    if (user != null) {
-      throw new Error('Username alredy in use');
+  const getUser = async (username) => {
+    try {
+      return await User.findOne({ username });
+    } catch (e) {
+      console.error(e);
+      throw new Error('Server error');
     }
-    return true;
-  } catch (e) {
-    console.error(e);
-    throw new Error('Server error');
+  };
+
+  const user = getUser(username);
+  if (user != null) {
+    throw new Error('Username alredy in use');
   }
+  return true;
 }

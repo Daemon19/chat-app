@@ -12,9 +12,13 @@ function intializePassport(passport) {
     )
   );
   passport.serializeUser((user, done) => done(null, user._id));
-  passport.deserializeUser(async (id, done) =>
-    done(null, await User.findById(id))
-  );
+  passport.deserializeUser(async (id, done) => {
+    try {
+      done(null, await User.findById(id));
+    } catch (e) {
+      done(e);
+    }
+  });
 }
 
 module.exports = intializePassport;
