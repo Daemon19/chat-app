@@ -77,7 +77,7 @@ async function usernameNotInUse(username) {
     }
   };
 
-  const user = getUser(username);
+  const user = await getUser(username);
   if (user != null) {
     throw new Error('Username alredy in use');
   }
