@@ -18,6 +18,16 @@
       <ul class="navbar-nav ms-auto">
         <% if (locals.user) { %>
         <li class="nav-item">
+          <button
+            type="button"
+            class="bg-transparent border-0 nav-link"
+            data-bs-toggle="modal"
+            data-bs-target="#copy-url-modal"
+          >
+            <i class="fa-solid fa-link"></i> Link
+          </button>
+        </li>
+        <li class="nav-item">
           <form action="/auth/logout?_method=DELETE" method="post">
             <button
               type="submit"
@@ -38,3 +48,69 @@
     </div>
   </div>
 </nav>
+
+<% if (locals.user) { %>
+<div
+  class="modal fade"
+  id="copy-url-modal"
+  tabindex="-1"
+  aria-labelledby="link-modal-label"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="link-modal-label">Chat Link</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div id="copy-alert-placeholder"></div>
+        <label for="chat-url" class="form-label"
+          >Share this link so others can message you.</label
+        >
+        <div class="input-group">
+          <input
+            class="form-control"
+            type="url"
+            name="chat-url"
+            id="chat-url"
+            disabled
+          />
+          <button class="btn btn-primary" type="submit" id="chat-url-copy">
+            <i class="fa-solid fa-copy"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const CHAT_URL = `${window.location.origin}/chat/<%= user._id %>`;
+
+  const chatUrlInput = document.getElementById('chat-url');
+  const alertPlaceholder = document.getElementById('copy-alert-placeholder');
+  const copyUrlTrigger = document.getElementById('chat-url-copy');
+
+  chatUrlInput.value = CHAT_URL;
+  copyUrlTrigger.onclick = copyChatUrl;
+
+  function copyChatUrl() {
+    chatUrlInput.select();
+    navigator.clipboard.writeText(chatUrlInput.value);
+    alertCopy();
+  }
+
+  function alertCopy() {
+    alertPlaceholder.innerHTML = `
+    <div class="alert alert-success alert-dismissible" role="alert">
+       <div>Chat link copied. Let the world message to you!</div>
+    </div>`;
+  }
+</script>
+<% } %>
