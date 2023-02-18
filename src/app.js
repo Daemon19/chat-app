@@ -9,6 +9,7 @@ const methodOverride = require('method-override');
 const expressLayouts = require('express-ejs-layouts');
 
 const intializePassport = require('./auth/passport-config');
+const connectMongoose = require('./database/connect-mongoose');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -16,11 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
 
 intializePassport(passport);
 
-mongoose.set('strictQuery', false);
-const clientPromise = mongoose.connect(process.env.MONGODB_URI).then((m) => {
-  console.log('Mongoose connected');
-  return m.connection.getClient();
-});
+const clientPromise = connectMongoose(process.env.MONGODB_URI);
 
 const app = express();
 
