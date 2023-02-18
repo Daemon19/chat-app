@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const flash = require('express-flash');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const path = require('path');
 const methodOverride = require('method-override');
 const expressLayouts = require('express-ejs-layouts');
@@ -16,9 +17,10 @@ if (process.env.NODE_ENV !== 'production') {
 intializePassport(passport);
 
 mongoose.set('strictQuery', false);
-mongoose.connect(process.env.MONGODB_URI, () =>
-  console.log('Mongoose connected')
-);
+const clientPromise = mongoose.connect(process.env.MONGODB_URI).then((m) => {
+  console.log('Mongoose connected');
+  return m.connection.getClient();
+});
 
 const app = express();
 
@@ -32,6 +34,7 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ clientPromise }),
   })
 );
 app.use(passport.initialize());
