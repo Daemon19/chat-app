@@ -45,7 +45,7 @@ router.post(
       body: req.body.message,
     });
 
-    res.redirect(`/chat/${userid}`);
+    res.redirect(`${req.baseUrl}/${userid}`);
   }
 );
 

@@ -34,7 +34,7 @@ router.post(
     try {
       const passwordHash = await bcrypt.hash(password, 10);
       await User.create({ username, passwordHash });
-      res.redirect('/auth/login');
+      res.redirect(req.baseUrl + '/login');
     } catch (e) {
       console.error(e);
       renderErrors(['Server error']);
@@ -62,7 +62,7 @@ router.delete('/logout', (req, res) => {
       return console.error(err);
     }
   });
-  res.redirect('/auth/login');
+  res.redirect(req.baseUrl + '/login');
 });
 
 module.exports = router;
