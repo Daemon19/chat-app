@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col-md-6 mx-auto">
+    <div class="card">
+      <div class="card-body">
+        <% if (locals.errors) { %>
+          <% errors.forEach(error => { %>
+            <div class="alert alert-danger" role="alert"><%= error %></div>
+          <% }) %>
+        <% } %>
+
+        <ul class="list-group">
+          <li class="list-group-item">
+            <h5>You</h5>
+            <p>Hi!</p>
+          </li>
+          <li class="list-group-item">
+            <h5>Daemon19</h5>
+            <p>Hello!</p>
+          </li>
+          <li class="list-group-item">
+            <h5>You</h5>
+            <p>How are u?</p>
+          </li>
+        </ul>
+
+        <form
+          class="pt-3"
+          action="/chat/<%= userid %>/messages"
+          method="post"
+          id="message-form"
+        >
+          <textarea
+            class="form-control"
+            rows="3"
+            placeholder="Type your message"
+            style="resize: none"
+            name="message"
+            id="message-input"
+            required
+          ></textarea>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const messageForm = document.getElementById('message-form');
+  const messageInput = document.getElementById('message-input');
+
+  messageInput.onkeydown = (e) => {
+    if (e.code === 'Enter') {
+      e.preventDefault();
+      if (messageInput.value.trim().length === 0) return;
+      messageForm.submit();
+    }
+  };
+</script>

@@ -41,6 +41,13 @@ app.use(expressLayouts);
 
 app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
+app.use('/chat', require('./routes/chat'));
+
+app.use(handleNotFound);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening at http://localhost:${PORT}`));
+
+function handleNotFound(req, res) {
+  res.status(404).render('404');
+}
