@@ -16,6 +16,7 @@ router.post(
   '/register',
   checkNotAuthenticated('/'),
   body('username')
+    .trim()
     .notEmpty()
     .isLength({ min: 5, max: 15 })
     .custom(usernameNotInUse),

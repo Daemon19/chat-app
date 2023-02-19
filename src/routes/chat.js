@@ -24,9 +24,7 @@ router.get('/:userid', async (req, res, next) => {
 
 router.post(
   '/:userid/messages',
-  body('message')
-    .notEmpty()
-    .withMessage('Message cannot be empty.'),
+  body('message').trim().notEmpty().withMessage('Message cannot be empty.'),
   async (req, res, next) => {
     const userid = toObjectId(req.params.userid);
     if (userid == null) {
