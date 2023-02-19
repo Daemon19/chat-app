@@ -10,6 +10,7 @@ const expressLayouts = require('express-ejs-layouts');
 
 const intializePassport = require('./auth/passport-config');
 const connectMongoose = require('./database/connect-mongoose');
+const { render404NotFound } = require('./errors/error-pages');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -43,11 +44,7 @@ app.use('/', require('./routes/index'));
 app.use('/auth', require('./routes/auth'));
 app.use('/chat', require('./routes/chat'));
 
-app.use(handleNotFound);
+app.use(render404NotFound);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Listening at http://localhost:${PORT}`));
-
-function handleNotFound(req, res) {
-  res.status(404).render('404');
-}

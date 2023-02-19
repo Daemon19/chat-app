@@ -4,19 +4,19 @@ const { body, validationResult } = require('express-validator');
 
 const User = require('../models/User');
 const Message = require('../models/Message');
+const { render404NotFound } = require('../errors/error-pages');
 
 const router = express.Router();
 
-router.get('/:userid', async (req, res, next) => {
+router.get('/:userid', async (req, res) => {
   const userid = toObjectId(req.params.userid);
   if (userid == null) {
-    // Show 404 error page
-    return next();
+    return render404NotFound(req, res);
   }
 
   const exists = await userExists(userid);
   if (!exists) {
-    return next();
+    return render404NotFound(req, res);
   }
 
   res.render('chat', { user: req.user, userid });
@@ -25,10 +25,10 @@ router.get('/:userid', async (req, res, next) => {
 router.post(
   '/:userid/messages',
   body('message').trim().notEmpty().withMessage('Message cannot be empty.'),
-  async (req, res, next) => {
+  async (req, res) => {
     const userid = toObjectId(req.params.userid);
     if (userid == null) {
-      return next();
+      return render404NotFound(req, res);
     }
 
     const errors = validationResult(req);
